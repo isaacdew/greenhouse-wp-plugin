@@ -93,6 +93,10 @@ Group Jobs
 *	To omit group headlines, include shortcode attribute: group_headline="false".
 *	For example: `[greenhouse group="department" group_headline="false"`
 
+Accessing Full Data Object Programmatically
+
+*	In JS, define a function called 'ghjb_retrieve_json'. This function will automatically be called and the full JSON object will be passed to it.
+*	In PHP, instantiante the Greenhouse_Job_Board_Public class and pass it two arguments: 'greenhouse-job-board', '2.7.3'. Then invoke the get_greenhouse_job_board_data method and pass it's value to a variable.
 
 == Coming Soon ==
 

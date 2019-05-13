@@ -466,6 +466,19 @@ class Greenhouse_Job_Board_Public {
 		return $ghjb_html;
 
 	}
+
+	public function get_greenhouse_job_board_data() {
+		$options = get_option( 'greenhouse_job_board_settings' );
+		// It wasn't there, so regenerate the data and save the transient
+		// api call to get jobs with callback
+		if (!isset($options['greenhouse_job_board_url_token'])) {
+			return;
+		}
+		$json_data = wp_remote_retrieve_body( wp_remote_get('https://api.greenhouse.io/v1/boards/' . $options['greenhouse_job_board_url_token'] . '/embed/jobs?content=true'));
+		$data = json_decode($json_data, true);
+
+		return $data['jobs'];
+	}
 	
 	
 	/**

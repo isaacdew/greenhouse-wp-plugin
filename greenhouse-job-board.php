@@ -13,15 +13,15 @@
  * @package           Greenhouse_Job_Board
  *
  * @wordpress-plugin
- * Plugin Name:       Greenhouse Job Board
- * Plugin URI:        https://wordpress.org/plugins/greenhouse-job-board/
+ * Plugin Name:       Greenhouse Job Board - Full Access
+ * Plugin URI:        
  * Description:       Pull a job board from greenhouse.io via API calls.
  * Version:           2.7.3
  * Author:            Brown Bag Marketing
  * Author URI:        https://www.brownbagmarketing.com/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       greenhouse-job-board
+ * Text Domain:       greenhouse-job-board-full-access
  * Domain Path:       /languages
  */
 

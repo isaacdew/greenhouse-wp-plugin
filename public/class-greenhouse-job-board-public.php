@@ -487,7 +487,7 @@ class Greenhouse_Job_Board_Public {
 		if (!$group_by_department) {
 			return $data['jobs'];
 		}
-		delete_transient('ghjb_jobs_by_department');
+		// delete_transient('ghjb_jobs_by_department');
 		// If we've gotten this far that means $group_by_department is true
 		if (false === ( $jobs_by_departmemt = get_transient( 'ghjb_jobs_by_department' ) )) {
 			$jobs_by_departmemt = array();

@@ -466,18 +466,37 @@ class Greenhouse_Job_Board_Public {
 		return $ghjb_html;
 
 	}
-
-	public function get_greenhouse_job_board_data() {
+	/**
+	 * Allows theme developers to access the full data object
+	 *
+	 * @since    2.7.0
+	 */
+	public function get_greenhouse_job_board_data($group_by_department=false) {
 		$options = get_option( 'greenhouse_job_board_settings' );
 		// It wasn't there, so regenerate the data and save the transient
 		// api call to get jobs with callback
 		if (!isset($options['greenhouse_job_board_url_token'])) {
 			return;
 		}
-		$json_data = wp_remote_retrieve_body( wp_remote_get('https://api.greenhouse.io/v1/boards/' . $options['greenhouse_job_board_url_token'] . '/embed/jobs?content=true'));
-		$data = json_decode($json_data, true);
+		if (false === ( $data = get_transient( 'ghjb_full_data' ) )) {
+			$json_data = wp_remote_retrieve_body( wp_remote_get('https://api.greenhouse.io/v1/boards/' . $options['greenhouse_job_board_url_token'] . '/embed/jobs?content=true'));
+			$data = json_decode($json_data, true);
 
-		return $data['jobs'];
+			set_transient('ghjb_full_data', $data, 12 * HOUR_IN_SECONDS);
+		}
+		if (!$group_by_department) {
+			return $data['jobs'];
+		}
+		// If we've gotten this far that means $group_by_department is true
+		$jobs_by_departmemt = array();
+		foreach($data['jobs'] as $job) {
+			$this_department_name = $job['departments'][0]['name'];
+			$jobs_by_departmemt[$this_department_name]['values'] = array();
+			$jobs_by_departmemt[$this_department_name]['name'] = $this_department_name;
+			array_push($jobs_by_departmemt[$this_department_name]['values'], $job);
+		}
+
+		return $jobs_by_departmemt;
 	}
 	
 	

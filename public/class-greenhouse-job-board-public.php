@@ -487,17 +487,21 @@ class Greenhouse_Job_Board_Public {
 		if (!$group_by_department) {
 			return $data['jobs'];
 		}
-		// delete_transient('ghjb_jobs_by_department');
+		delete_transient('ghjb_jobs_by_department');
 		// If we've gotten this far that means $group_by_department is true
 		if (false === ( $jobs_by_departmemt = get_transient( 'ghjb_jobs_by_department' ) )) {
 			$jobs_by_departmemt = array();
+			$count = 0;
 			foreach($data['jobs'] as $job) {
 				$this_state = explode(", ", $job['location']['name'])[1];
 				$this_department_name = $job['departments'][0]['name'];
 				$jobs_by_departmemt[$this_state]['state_name'] = $this_state;
-				$jobs_by_departmemt[$this_state][$this_department_name]['values'] = array();
-				$jobs_by_departmemt[$this_state][$this_department_name]['department_name'] = $this_department_name;
-				array_push($jobs_by_departmemt[$this_state][$this_department_name]['values'], $job);
+				$jobs_by_departmemt[$this_state]['departments'] = array();
+				$jobs_by_departmemt[$this_state]['departments'][$count]['values'] = array();
+				$jobs_by_departmemt[$this_state]['departments'][$count]['department_name'] = $this_department_name;
+				array_push($jobs_by_departmemt[$this_state]['departments'][$count]['values'], $job);
+
+				$count++;
 			}
 			set_transient('ghjb_jobs_by_department', $jobs_by_departmemt, 3 * HOUR_IN_SECONDS);
 		}

@@ -478,6 +478,7 @@ class Greenhouse_Job_Board_Public {
 		if (!isset($options['greenhouse_job_board_url_token'])) {
 			return;
 		}
+		// delete_transient('ghjb_full_data');
 		if (false === ( $data = get_transient( 'ghjb_full_data' ) )) {
 			$json_data = wp_remote_retrieve_body( wp_remote_get('https://api.greenhouse.io/v1/boards/' . $options['greenhouse_job_board_url_token'] . '/embed/jobs?content=true'));
 			$data = json_decode($json_data, true);
@@ -496,10 +497,8 @@ class Greenhouse_Job_Board_Public {
 				$this_state = explode(", ", $job['location']['name'])[1];
 				$this_department_name = $job['departments'][0]['name'];
 				$jobs_by_departmemt[$this_state]['state_name'] = $this_state;
-				$jobs_by_departmemt[$this_state]['departments'] = array();
-				$jobs_by_departmemt[$this_state]['departments'][$count]['values'] = array();
-				$jobs_by_departmemt[$this_state]['departments'][$count]['department_name'] = $this_department_name;
-				array_push($jobs_by_departmemt[$this_state]['departments'][$count]['values'], $job);
+				$jobs_by_departmemt[$this_state]['departments'][$this_department_name]['department_name'] = $this_department_name;
+				$jobs_by_departmemt[$this_state]['departments'][$this_department_name]['values'][$count] = $job;
 
 				$count++;
 			}

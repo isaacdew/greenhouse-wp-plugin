@@ -492,6 +492,7 @@ class Greenhouse_Job_Board_Public {
 		// If we've gotten this far that means $group_by_department is true
 		if (false === ( $jobs_by_departmemt = get_transient( 'ghjb_jobs_by_department' ) )) {
 			$jobs_by_departmemt = array();
+			$numItems = count($data['jobs']);
 			$count = 0;
 			foreach($data['jobs'] as $job) {
 				$this_state = explode(", ", $job['location']['name'])[1];
@@ -501,7 +502,11 @@ class Greenhouse_Job_Board_Public {
 				$jobs_by_departmemt[$this_state]['departments'][$this_department_name]['values'][$count] = $job;
 
 				$count++;
+				if($count === $numItems) {
+					ksort($jobs_by_departmemt[$this_state]['departments']);
+				}
 			}
+			ksort($jobs_by_departmemt);
 			set_transient('ghjb_jobs_by_department', $jobs_by_departmemt, 3 * HOUR_IN_SECONDS);
 		}
 
